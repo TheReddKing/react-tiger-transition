@@ -33,10 +33,10 @@ export function reducer(state, action) {
     case "endTransition": {
       return {
         ...state,
-        // Reset to default transition after animation
+        // Reset to default transition after animation  
         transition: evalTransition({
-          transition: globalTransitionProps.classNames,
-          timeout: globalTransitionProps.timeout,
+          transition: state.globalTransitionProps.classNames,
+          timeout: state.globalTransitionProps.timeout,
         }),
         onTransition: false,
       };
