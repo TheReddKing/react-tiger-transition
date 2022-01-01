@@ -33,11 +33,8 @@ export function reducer(state, action) {
     case "endTransition": {
       return {
         ...state,
-        // Reset to default transition after animation  
-        transition: evalTransition({
-          transition: state.globalTransitionProps.classNames,
-          timeout: state.globalTransitionProps.timeout,
-        }),
+        // Reset to default transition after animation
+        transition: state.defaultTransition,
         onTransition: false,
       };
     }
@@ -131,6 +128,10 @@ const Navigation = ({
       {...other}
       initialState={{
         transition: evalTransition({
+          transition: globalTransitionProps.classNames,
+          timeout: globalTransitionProps.timeout,
+        }),
+        defaultTransition: evalTransition({
           transition: globalTransitionProps.classNames,
           timeout: globalTransitionProps.timeout,
         }),
