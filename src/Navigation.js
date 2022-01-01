@@ -1,27 +1,27 @@
-import React, { useMemo, useReducer } from "react";
-import { withRouter, matchPath, Redirect } from "react-router-dom";
-import PropTypes from "prop-types"; // eslint-disable-line import/no-extraneous-dependencies
-import Screen from "./Screen";
-import Route from "./Route";
-import { NavigationContext } from "./context";
+import React, { useMemo, useReducer } from 'react';
+import { withRouter, matchPath, Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types'; // eslint-disable-line import/no-extraneous-dependencies
+import Screen from './Screen';
+import Route from './Route';
+import { NavigationContext } from './context';
 
 export const evalTransition = ({ transition, timeout }) => {
   const computeTimeout = timeout ? { timeout } : {};
-  return typeof transition === "function"
+  return typeof transition === 'function'
     ? { ...computeTimeout, ...transition() }
-    : Object.prototype.toString.call(transition) === "[object Object]"
-    ? { ...computeTimeout, ...transition }
-    : typeof transition === "string"
-    ? { ...computeTimeout, classNames: transition }
-    : { timeout: 0, classNames: "" };
+    : Object.prototype.toString.call(transition) === '[object Object]'
+      ? { ...computeTimeout, ...transition }
+      : typeof transition === 'string'
+        ? { ...computeTimeout, classNames: transition }
+        : { timeout: 0, classNames: '' };
 };
 
 export function reducer(state, action) {
   switch (action.type) {
-    case "setTransition": {
+    case 'setTransition': {
       const transition = evalTransition({ ...action.value });
       window.setTimeout(() => {
-        action.dispatch({ type: "endTransition" });
+        action.dispatch({ type: 'endTransition' });
       }, transition.timeout + 200);
       return {
         ...state,
@@ -30,7 +30,7 @@ export function reducer(state, action) {
       };
     }
 
-    case "endTransition": {
+    case 'endTransition': {
       return {
         ...state,
         // Reset to default transition after animation
@@ -58,16 +58,15 @@ const NavigationProvider = withRouter(
   }) => {
     const [state, dispatch] = useReducer(reducer, {
       ...initialState,
-      setTransition: (transition, timeout) =>
-        new Promise((resolve) => {
-          resolve(
-            dispatch({
-              type: "setTransition",
-              value: { transition, timeout },
-              dispatch,
-            })
-          );
-        }),
+      setTransition: (transition, timeout) => new Promise((resolve) => {
+        resolve(
+          dispatch({
+            type: 'setTransition',
+            value: { transition, timeout },
+            dispatch,
+          })
+        );
+      }),
     });
 
     const matched = useMemo(() => {
@@ -76,10 +75,9 @@ const NavigationProvider = withRouter(
       React.Children.forEach(children, (child) => {
         if (computeMatch == null && React.isValidElement(child)) {
           const path = child.props.path || child.props.from || null;
-          computeMatch =
-            path && !child.props.skip
-              ? matchPath(location.pathname, { ...child.props, path })
-              : null;
+          computeMatch = path && !child.props.skip
+            ? matchPath(location.pathname, { ...child.props, path })
+            : null;
         }
       });
 
